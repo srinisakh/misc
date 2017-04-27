@@ -63,9 +63,11 @@ def main(input_files):
                                  for import_file in import_files])
                 input_files += rel_paths.difference(input_files)
                 for rel_path in rel_paths:
-                    dependencies.setdefault(rel_path, []).append(input_file)
+                    dependencies.setdefault(rel_path, []).append(
+                        input_file.replace(" ", "\\ "))
         except IOError as e:
-            print "I/O error({0}): {1} skipping {2}".format(e.errno, e.strerror, input_file)
+            print "I/O error({0}): {1} skipping {2}".format(
+                e.errno, e.strerror, input_file)
 
     return dependencies
 
@@ -73,6 +75,6 @@ if __name__ == "__main__":
     if sys.argv[1:]:
         dependencies = main(sys.argv[1:])
         for k, v in dependencies.iteritems():
-            print k, "<-", ", ".join(v)
+            print k, "<-", " ".join(v)
     else:
         print "No arguments, expect file names for processing"
